@@ -1,26 +1,36 @@
 // Fetch the cart from localStorage (or session storage) and display it
-window.onload = function() {
+window.onload = function () {
     const checkoutItems = document.getElementById("checkoutItems");
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+    // Check if the cart is empty
     if (cart.length === 0) {
         checkoutItems.innerHTML = '<p>Your cart is empty.</p>';
     } else {
         cart.forEach(item => {
             checkoutItems.innerHTML += `
             <div class="cart-item">
-                <img src="${item.image}" alt="${item.name}" />
-                <p>${item.name}</p>
-                <p>Price: $${item.price}</p>
+                <img src="${item.image}" alt="${item.name}" class="cart-item-image" />
+                <div class="cart-item-details">
+                    <p><strong>${item.name}</strong></p>
+                    <p>Price: $${item.price.toFixed(2)}</p>
+                    <p>Quantity: ${item.quantity}</p>
+                </div>
             </div>
             `;
         });
     }
 
-    document.getElementById("paymentForm").onsubmit = function(event) {
-        event.preventDefault();
+    // Handle form submission for payment
+    document.getElementById("paymentForm").onsubmit = function (event) {
+        event.preventDefault(); // Prevent default form submission behavior
+
         alert("Payment Successful! Your order will be processed shortly.");
-        localStorage.removeItem("cart"); // Clear cart after payment
-        window.location.href = "thankyou.html"; // Redirect to a thank-you page
+        
+        // Clear the cart after payment
+        localStorage.removeItem("cart");
+
+        // Redirect to the thank-you page
+        window.location.href = "thankyou.html";
     };
 };
